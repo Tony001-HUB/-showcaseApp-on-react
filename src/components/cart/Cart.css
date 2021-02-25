@@ -1,0 +1,10 @@
+.cart{
+    position: fixed ;
+    bottom: 35rem;
+    right: 4.5rem;
+
+    cursor: pointer;
+    z-index: 10;
+    padding: 1rem;
+    border-radius: 7px;
+}
