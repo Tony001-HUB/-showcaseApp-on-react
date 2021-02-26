@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Preloader from '../preloader/preloader'
 import ProductsList from '../productsList/ProductsList'
 import Cart from '../cart/Сart'
+import BasketList from '../basketList/BasketList'
 
 
 export default function Shop() {
@@ -11,7 +12,48 @@ export default function Shop() {
     const[products, setProducts] = useState([]);
     const[loading, setLoading] = useState(true);
     const[ordering, setOrdering] = useState([]);
+    const[cartIsShow, setCartIsShow] = useState(false);
 
+    
+    const incrCountProduct = (id) => {
+        const newOrdering = ordering.map((item) => {
+            if(id === item.id){
+                const newCount = item.count + 1;
+                return{
+                    ...item,
+                    count: newCount
+                }
+            } else {
+                return item;
+            } 
+        })
+        setOrdering(newOrdering);
+    }
+
+    const decrCountProduct = (id) => {
+        const newOrdering = ordering.map((item) => {
+            if(id === item.id && item.count > 1){
+                const newCount = item.count - 1;
+                return{
+                    ...item,
+                    count: newCount
+                }
+            } else {
+                return item;
+            } 
+        })
+        setOrdering(newOrdering);
+    }
+
+    const handleShowCart = () => {
+        setCartIsShow(!cartIsShow);
+        console.log(cartIsShow)
+    }
+
+    const deleteToCart = (id) => {
+        const itemIndex = ordering.filter(deleteItem => deleteItem.id !== id);
+        setOrdering(itemIndex);
+    }
 
     const addToCart = (item) => {
         const itemIndex = ordering.findIndex(clickItem => clickItem.id === item.id);
@@ -27,7 +69,7 @@ export default function Shop() {
                 if(itemIndex === index){
                     return{
                         ...clickItem,
-                        count: clickItem.count++
+                        count: clickItem.count + 1
                     }
                 }else {
                     return clickItem;
@@ -52,9 +94,12 @@ export default function Shop() {
         })
     }, [])
 
-
+    console.log(ordering);
     return <main className = "container content"> 
-        <Cart count = {ordering.length}/>
-        {loading ? <Preloader/> : <ProductsList products = {products} addToCart={addToCart}/>}
+        <Cart count = {ordering.length} handleShowCart={handleShowCart}/>
+        {loading ? (<Preloader/>) : (<ProductsList products = {products} addToCart={addToCart}/>)}
+        {
+            cartIsShow && <BasketList ordering={ordering} handleShowCart={handleShowCart} deleteToCart={deleteToCart} incrCountProduct={incrCountProduct} decrCountProduct={decrCountProduct}/>
+        }
     </main>
 }
