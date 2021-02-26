@@ -1,6 +1,6 @@
 import Product from '../product/Product'
 
-function ProductsList({products = []}){
+function ProductsList({products = [], addToCart}){
 
     if(!products.length){
         return(
@@ -11,7 +11,7 @@ function ProductsList({products = []}){
     return(
         <div>
             {products.map((product) => (
-                <Product key={product.id} {...product}/>
+                <Product key={product.id} {...product} addToCart = {addToCart}/>
             ))}
         </div>
     )

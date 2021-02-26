@@ -6,7 +6,8 @@ function Product(state){
         name,
         description,
         price,
-        full_background
+        full_background,
+        addToCart
     } = state;
 
     return(
@@ -20,7 +21,11 @@ function Product(state){
               <br/>
               <p>{`Цена: ${price} $`}</p>
             </div>
-            <button className="waves-effect waves-light btn">Купить</button>
+            <button onClick={() => addToCart({
+              id,
+              name,
+              price
+            })} className="waves-effect waves-light btn">Купить</button>
           </div>
     )
 }

@@ -10,7 +10,33 @@ export default function Shop() {
     
     const[products, setProducts] = useState([]);
     const[loading, setLoading] = useState(true);
-    const[ordering, setOrdering] = useState(0);
+    const[ordering, setOrdering] = useState([]);
+
+
+    const addToCart = (item) => {
+        const itemIndex = ordering.findIndex(clickItem => clickItem.id === item.id);
+
+        if(itemIndex < 0) {
+            const newItem = {
+                ...item,
+                count: 1
+            }
+            setOrdering([...ordering, newItem])
+        }else {
+            const newRecurringOrdering = ordering.map((clickItem, index) => {
+                if(itemIndex === index){
+                    return{
+                        ...clickItem,
+                        count: clickItem.count++
+                    }
+                }else {
+                    return clickItem;
+                }    
+
+            });
+            setOrdering(newRecurringOrdering);
+        }
+    }
 
     useEffect(function getProducts(){
         console.log(API_KEY  + " " +  API_URL)
@@ -29,6 +55,6 @@ export default function Shop() {
 
     return <main className = "container content"> 
         <Cart count = {ordering.length}/>
-        {loading ? <Preloader/> : <ProductsList products = {products}/>}
+        {loading ? <Preloader/> : <ProductsList products = {products} addToCart={addToCart}/>}
     </main>
 }
